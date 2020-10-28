@@ -6,14 +6,20 @@
     <v-list-item class="grow" @click="$emit('click')">
       <v-list-item-avatar color="grey darken-3">
         <v-icon v-if="isFolder" color="white">
-          text_snippet
+          fa-folder
         </v-icon>
         <v-img
-          v-else
+          v-else-if="iconUrl"
           class="elevation-6"
           alt=""
-          :src="icon"
+          :src="iconUrl"
         ></v-img>
+        <v-icon
+          v-else
+          color="white"
+        >
+          {{icon || 'fa-link'}}
+        </v-icon>
       </v-list-item-avatar>
 
       <v-list-item-content>
@@ -34,7 +40,11 @@
       },
       icon: {
         type: String,
-        required: true,
+        default: null,
+      },
+      iconUrl: {
+        type: String,
+        default: null,
       },
       subTitle: {
         type: String,
@@ -42,7 +52,7 @@
       },
       colors: {
         type: Object,
-        required: true,
+        default: () => ({}),
       },
       isFolder: {
         type: Boolean,
@@ -50,11 +60,5 @@
       }
     },
     data: () => ({}),
-    methods: {
-      // doSomething: () => {
-      //   console.log('dfjhjhkdfjhkdf');
-      //   this.$emit('card-clicked')
-      // }
-    }
   }
 </script>
