@@ -1,58 +1,122 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <v-container>
+    <v-row>
+      <span
+        v-for="(breadcrumb, pos) in breadcrumbs"
+        :key="pos"
+      >
+        <span class="" v-if="pos > 0">></span>
+        <span
+          class="breadcrumb"
+          :disabled="true"
+          @click="setBreadcrumb(breadcrumb, pos)"
+        >
+          {{breadcrumb.title}}
+        </span>
+      </span>
+        
+    </v-row>
+    <v-row>
+      <v-col>
+        <CardListItem
+          v-for="(card, pos) in activeCard.cards"
+          :key="pos"
+          :title="card.title"
+          :icon="card.icon"
+          :subTitle="card.subTitle"
+          :colors="card.colors"
+          :isFolder="!!card.cards"
+          @click="cardClicked(card)"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  import CardListItem from "./CardListItem";
+  export default {
+    name: 'HelloWorld',
+    components: {
+      CardListItem,
+    },
+    data: () => ({
+      breadcrumbs: [],
+      activeCard: {
+        title: 'Home',
+        cards: []
+      },
+      cards: [
+        {
+          url: 'https://www.youtube.com/channel/UCa475eqLbfWj2wRbdhQU6fA',
+          title: 'Youtube',
+          icon: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light',
+          subTitle: 'This is my youtube channel',
+          colors: {
+            cardColor: '#ef9a9a',
+            cardTheme: 'dark'
+          }
+        },
+        {
+          url: 'https://www.facebook.com/africoder',
+          title: 'Facebook difudifudi',
+          icon: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light',
+          subTitle: 'This is my youtube channel',
+          colors: {
+            cardColor: '#26c6da',
+            cardTheme: 'dark'
+          }
+        },
+        {
+          title: 'Manz 42',
+          subTitle: 'This is my youtube channel',
+          colors: {
+            cardColor: '#fff',
+          },
+          cards: [
+            {
+              title: 'Manz 42 Youtube',
+              icon: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light',
+              subTitle: 'This is my youtube channel',
+              colors: {
+                cardColor: '#26c6da',
+              },
+            }
+          ]
+        },
+      ],
+    }),
+    mounted() {
+      this.activeCard.cards = this.cards;
+      this.breadcrumbs.push({
+        title: 'Home',
+        cards: this.cards,
+      });
+    },
+    methods: {
+      cardClicked(card) {
+        if (card.cards) {
+          this.breadcrumbs.push(card);
+          this.activeCard = card;
+        } else if (card.url) {
+          window.open(card.url, "_blank");
+        }
+      },
+      setBreadcrumb(card, pos) {
+        this.activeCard = card;
+        this.breadcrumbs = this.breadcrumbs.slice(0, pos + 1)
+      }
+    }
   }
-}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+<style lang="scss">
+.breadcrumb {
+  padding: 5px;
+  margin: 5px;
+  &:hover {
+    background: #ccc;
+    border-radius: 3px;;
+  }
 }
 </style>
