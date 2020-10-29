@@ -1,37 +1,74 @@
 <template>
   <v-container>
     <v-row>
-      <span
-        v-for="(breadcrumb, pos) in breadcrumbLinks"
-        :key="pos"
-      >
-        <span class="" v-if="pos > 0">></span>
+      <v-col>
         <span
-          class="breadcrumb"
-          :class="{'active': pos === (breadcrumbLinks.length - 1)}"
-          :disabled="true"
-          @click="setBreadcrumb(breadcrumb, pos)"
+          v-for="(breadcrumb, pos) in breadcrumbLinks"
+          :key="pos"
         >
-          {{breadcrumb.title}}
+          <span style="margin: 3px;" v-if="pos > 0">></span>
+          <span
+            class="breadcrumb"
+            :class="{'active': pos === (breadcrumbLinks.length - 1)}"
+            :disabled="true"
+            @click="setBreadcrumb(breadcrumb, pos)"
+          >
+            {{breadcrumb.title}}
+          </span>
         </span>
-      </span>
-        
+      </v-col>
     </v-row>
+    <v-toolbar
+      flat
+    >
+      <v-btn
+        icon
+        @click="goBack()"
+        v-if="breadcrumbLinks.length > 1"
+      >
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
+      <v-btn
+        v-else
+        icon
+        disabled
+      >
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-toolbar-title>{{activeSocialLink.title}}</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
     <v-row>
       <v-col>
         <CardListItem
-          v-for="(card, pos) in activeCard.socialLinks"
+          v-for="(socialLink, pos) in activeSocialLink.children"
           :key="pos"
-          :title="card.title"
-          :icon="card.icon"
-          :iconUrl="card.iconUrl"
-          :subTitle="card.subTitle"
-          :colors="card.colors"
-          :isFolder="!!card.socialLinks"
-          @click="cardClicked(card)"
+          :title="socialLink.title"
+          :icon="socialLink.icon"
+          :iconUrl="socialLink.iconUrl"
+          :subTitle="socialLink.subTitle"
+          :colors="socialLink.colors"
+          :isFolder="!!socialLink.children"
+          @click="socialLinkClicked(socialLink)"
         />
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar"
+    >
+      {{ snackbarText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -46,10 +83,12 @@
     },
     data: () => ({
       breadcrumbLinks: [],
-      activeCard: {
+      activeSocialLink: {
         title: 'Home',
-        socialLinks: []
+        children: []
       },
+      snackbar: false,
+      snackbarText: '',
     }),
     computed: {
       socialLinks() {
@@ -57,26 +96,39 @@
       }
     },
     mounted() {
-      this.activeCard.socialLinks = this.socialLinks;
+      this.activeSocialLink.children = this.socialLinks;
       this.breadcrumbLinks.push({
         title: 'Home',
-        socialLinks: this.socialLinks,
+        children: this.socialLinks,
       });
     },
     methods: {
-      cardClicked(card) {
-        if (card.socialLinks) {
-          this.breadcrumbLinks.push(card);
-          this.activeCard = card;
-        } else if (card.url) {
-          window.open(card.url, "_blank");
+      socialLinkClicked(socialLink) {
+        if (socialLink.children) {
+          this.breadcrumbLinks.push(socialLink);
+          this.activeSocialLink = socialLink;
+        } else if (socialLink.url) {
+          window.open(socialLink.url, "_blank");
+        } else {
+          this.showSnackbarMessage('Link is missing');
+          console.warn('SocialLink Config Error - Please contact site owner to configure src/config/socialLinks.js properly')
         }
       },
-      setBreadcrumb(card, pos) {
+      setBreadcrumb(socialLink, pos) {
         if (pos !== (this.breadcrumbLinks.length - 1)) {
-          this.activeCard = card;
+          this.activeSocialLink = socialLink;
           this.breadcrumbLinks = this.breadcrumbLinks.slice(0, pos + 1)
         }
+      },
+      goBack() {
+        if (this.breadcrumbLinks.length > 1) {
+          this.breadcrumbLinks = this.breadcrumbLinks.slice(0, this.breadcrumbLinks.length - 1);
+          this.activeSocialLink = this.breadcrumbLinks[this.breadcrumbLinks.length - 1];
+        }
+      },
+      showSnackbarMessage(message) {
+        this.snackbar = true;
+        this.snackbarText = message;
       }
     }
   }
@@ -84,17 +136,19 @@
 
 <style lang="scss">
 .breadcrumb {
-  padding: 5px;
-  margin: 5px;
+  padding: 3px 5px;
+  margin: 7px 0;
   cursor: pointer;
   text-overflow: ellipsis;
+  color: #333;
   border-radius: 3px;
+
   &:hover {
     background: #ccc;
   };
   
   &.active {
-    color: #1976d2;
+    color: #aaa;
     &:hover {
       background: none;
       cursor:initial;

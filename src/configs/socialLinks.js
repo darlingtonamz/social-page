@@ -3,7 +3,7 @@ export default [
     url: 'https://www.amanze.me',
     title: 'Personal Website',
     iconUrl: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light',
-    subTitle: 'This is personal portfolia website page',
+    subTitle: 'This is personal portfolio website page',
     colors: {
       cardColor: '#26c6da',
       cardTheme: 'dark'
@@ -30,16 +30,13 @@ export default [
     }
   },
   {
-    title: 'Manz 42',
-    subTitle: 'This is my youtube channel',
-    socialLinks: [
+    title: 'More SocialLinks',
+    subTitle: 'This is a collection of SocialLinks',
+    children: [
       {
-        title: 'Manz 42 Youtube',
+        title: 'Broken Link',
         iconUrl: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light',
-        subTitle: 'This is my youtube channel',
-        colors: {
-          cardColor: '#26c6da',
-        },
+        subTitle: 'Coming soon...',
       }
     ]
   },
