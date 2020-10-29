@@ -1,5 +1,6 @@
 export default [
   {
+    id: 'person-page',
     url: 'https://www.amanze.me',
     title: 'Personal Website',
     iconUrl: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light',
@@ -10,6 +11,7 @@ export default [
     }
   },
   {
+    id: 'yt-page',
     url: 'https://www.youtube.com/channel/UCa475eqLbfWj2wRbdhQU6fA',
     title: 'Youtube',
     icon: 'fab fa-youtube',
@@ -20,6 +22,7 @@ export default [
     }
   },
   {
+    id: 'fb-page',
     url: 'https://www.facebook.com/africoder',
     title: 'Facebook difudifudi',
     icon: 'fab fa-facebook',
@@ -30,9 +33,29 @@ export default [
     }
   },
   {
+    id: 'more-social',
     title: 'More SocialLinks',
     subTitle: 'This is a collection of SocialLinks',
     children: [
+      {
+        id: 'linkseption',
+        title: 'Linkseption',
+        subTitle: 'This is a collection of SocialLinks',
+        children: [
+          {
+            id: 'linkseption',
+            title: 'Linkseption',
+            subTitle: 'This is a collection of SocialLinks',
+            children: [
+              {
+                id: 'linkseption',
+                title: 'Linkseption',
+                subTitle: 'This is a collection of SocialLinks',
+              },
+            ]
+          },
+        ]
+      },
       {
         title: 'Broken Link',
         iconUrl: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light',
