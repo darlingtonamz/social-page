@@ -1,30 +1,31 @@
 <template>
   <v-card
-    :color="colors.cardColor"
-    :dark="colors.cardTheme === 'dark'"
+    :color="(socialLink.colors || {}).cardColor"
+    :dark="(socialLink.colors || {}).cardTheme === 'dark'"
+    style="margin-bottom: 5px"
   >
     <v-list-item class="grow" @click="$emit('click')">
-      <v-list-item-avatar color="grey darken-3">
+      <v-list-item-avatar :color="(socialLink.colors || {}).cardAvatarColor || 'grey darken-3'">
         <v-icon v-if="isFolder" color="white">
           fa-folder
         </v-icon>
         <v-img
-          v-else-if="iconUrl"
+          v-else-if="socialLink.iconUrl"
           class="elevation-6"
           alt=""
-          :src="iconUrl"
+          :src="socialLink.iconUrl"
         ></v-img>
         <v-icon
           v-else
           color="white"
         >
-          {{icon || 'fa-link'}}
+          {{socialLink.icon || 'fa-link'}}
         </v-icon>
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title>{{title}}</v-list-item-title>
-        <v-list-item-subtitle>{{subTitle}}</v-list-item-subtitle>
+        <v-list-item-title>{{socialLink.title}}</v-list-item-title>
+        <v-list-item-subtitle>{{socialLink.subTitle}}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
   </v-card>
@@ -34,31 +35,16 @@
   export default {
     name: 'CardListItem',
     props: {
-      title: {
-        type: String,
-        required: true,
-      },
-      icon: {
-        type: String,
-        default: null,
-      },
-      iconUrl: {
-        type: String,
-        default: null,
-      },
-      subTitle: {
-        type: String,
-        required: true,
-      },
-      colors: {
+      socialLink: {
         type: Object,
         default: () => ({}),
       },
-      isFolder: {
-        type: Boolean,
-        default: false,
-      }
     },
     data: () => ({}),
+    computed: {
+      isFolder () {
+        return !!this.socialLink.children;
+      }
+    }
   }
 </script>
