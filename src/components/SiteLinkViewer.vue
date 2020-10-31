@@ -45,12 +45,7 @@
             <CardListItem
               v-for="(socialLink, pos) in activeSocialLink.children"
               :key="pos"
-              :title="socialLink.title"
-              :icon="socialLink.icon || (!socialLink.children && !socialLink.url ? 'fa-question' : null)"
-              :iconUrl="socialLink.iconUrl"
-              :subTitle="socialLink.subTitle"
-              :colors="socialLink.colors"
-              :isFolder="!!socialLink.children"
+              :socialLink="socialLink"
               @click="socialLinkClicked(socialLink)"
             />
           </v-col>

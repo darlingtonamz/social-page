@@ -7,14 +7,18 @@
         dark
       >
         <div class="d-flex align-center">
-          <v-img
+          <img
+            alt="Vue logo"
+            src="./assets/logo.jpg"
+            class="site-icon">
+          <!-- <v-img
             alt="Vuetify Logo"
             class="shrink mr-2"
             contain
-            :src="appConfig.siteIconUrl || 'https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png'"
+            :src="siteIconUrl || 'https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png'"
             transition="scale-transition"
             width="40"
-          />
+          /> -->
           <span class="site-title">
             {{appConfig.siteName}}
           </span>
@@ -39,6 +43,8 @@ export default {
   data: () => ({}),
   computed: {
     appConfig: () => appConfig,
+    // siteIconUrl: () => require(appConfig.siteIconUrl)
+    siteIconUrl: () => "./assets/logo.png"
   }
 };
 </script>
@@ -50,5 +56,12 @@ export default {
 .site-title {
   font-size: 2em;
   font-weight: 500;
+}
+
+.site-icon {
+  border-radius: 50%;
+  margin-right: 10px;
+  width: 40px;
+  box-shadow: 0px 4px 13px -8px #000;
 }
 </style>

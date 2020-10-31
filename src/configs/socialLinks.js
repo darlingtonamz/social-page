@@ -7,29 +7,31 @@ export default [
     subTitle: 'This is personal portfolio website page',
     colors: {
       cardColor: '#26c6da',
-      cardTheme: 'dark'
+      cardTheme: 'dark',
+      cardAvatarColor: 'none'
     }
   },
   {
     id: 'yt-page',
     url: 'https://www.youtube.com/channel/UCa475eqLbfWj2wRbdhQU6fA',
-    title: 'Youtube',
+    title: 'Amanze Ogbonna Youtube Channel Page',
     icon: 'fab fa-youtube',
     subTitle: 'This is my youtube channel',
     colors: {
-      cardColor: '#ef9a9a',
-      cardTheme: 'dark'
+      cardTheme: 'dark',
+      cardAvatarColor: 'red darken-3'
     }
   },
   {
     id: 'fb-page',
     url: 'https://www.facebook.com/africoder',
-    title: 'Facebook difudifudi',
+    title: 'Africoder Facebook',
     icon: 'fab fa-facebook',
     subTitle: 'This is my Facebook Page',
     colors: {
       cardColor: '#1877f2',
-      cardTheme: 'dark'
+      cardTheme: 'dark',
+      cardAvatarColor: 'blue darken-3'
     }
   },
   {
