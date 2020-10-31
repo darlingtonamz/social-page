@@ -6,7 +6,7 @@
   >
     <v-list-item class="grow" @click="$emit('click')">
       <v-list-item-avatar :color="(socialLink.colors || {}).cardAvatarColor || 'grey darken-3'">
-        <v-icon v-if="socialLink.isFolder" color="white">
+        <v-icon v-if="isFolder" color="white">
           fa-folder
         </v-icon>
         <v-img
@@ -39,30 +39,6 @@
         type: Object,
         default: () => ({}),
       },
-      // title: {
-      //   type: String,
-      //   required: true,
-      // },
-      // icon: {
-      //   type: String,
-      //   default: null,
-      // },
-      // iconUrl: {
-      //   type: String,
-      //   default: null,
-      // },
-      // subTitle: {
-      //   type: String,
-      //   required: true,
-      // },
-      // colors: {
-      //   type: Object,
-      //   default: () => ({}),
-      // },
-      // isFolder: {
-      //   type: Boolean,
-      //   default: false,
-      // }
     },
     data: () => ({}),
     computed: {

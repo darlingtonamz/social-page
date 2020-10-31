@@ -11,14 +11,6 @@
             alt="Vue logo"
             src="./assets/logo.jpg"
             class="site-icon">
-          <!-- <v-img
-            alt="Vuetify Logo"
-            class="shrink mr-2"
-            contain
-            :src="siteIconUrl || 'https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png'"
-            transition="scale-transition"
-            width="40"
-          /> -->
           <span class="site-title">
             {{appConfig.siteName}}
           </span>
