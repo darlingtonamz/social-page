@@ -1,6 +1,3 @@
-
-
-        /*eslint no-useless-escape: "off"*/
 export default `
 <header>
   <nav class="text-center">
