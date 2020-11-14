@@ -35,21 +35,21 @@
       >
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-toolbar-title>{{activeSocialLink.title}}</v-toolbar-title>
+      <v-toolbar-title>{{activeSiteLink.title}}</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-row>
       <v-col>
         <CardListItem
-          v-for="(socialLink, pos) in activeSocialLink.children"
+          v-for="(siteLink, pos) in activeSiteLink.children"
           :key="pos"
-          :title="socialLink.title"
-          :icon="socialLink.icon"
-          :iconUrl="socialLink.iconUrl"
-          :subTitle="socialLink.subTitle"
-          :colors="socialLink.colors"
-          :isFolder="!!socialLink.children"
-          @click="socialLinkClicked(socialLink)"
+          :title="siteLink.title"
+          :icon="siteLink.icon"
+          :iconUrl="siteLink.iconUrl"
+          :subTitle="siteLink.subTitle"
+          :colors="siteLink.colors"
+          :isFolder="!!siteLink.children"
+          @click="siteLinkClicked(siteLink)"
         />
       </v-col>
     </v-row>
@@ -74,7 +74,7 @@
 
 <script>
   import CardListItem from "./CardListItem";
-  import socialLinks from "../configs/socialLinks";
+  import siteLinks from "../configs/siteLinks";
 
   export default {
     name: 'HelloWorld',
@@ -83,7 +83,7 @@
     },
     data: () => ({
       breadcrumbLinks: [],
-      activeSocialLink: {
+      activeSiteLink: {
         title: 'Home',
         children: []
       },
@@ -91,39 +91,39 @@
       snackbarText: '',
     }),
     computed: {
-      socialLinks() {
-        return socialLinks
+      siteLinks() {
+        return siteLinks
       }
     },
     mounted() {
-      this.activeSocialLink.children = this.socialLinks;
+      this.activeSiteLink.children = this.siteLinks;
       this.breadcrumbLinks.push({
         title: 'Home',
-        children: this.socialLinks,
+        children: this.siteLinks,
       });
     },
     methods: {
-      socialLinkClicked(socialLink) {
-        if (socialLink.children) {
-          this.breadcrumbLinks.push(socialLink);
-          this.activeSocialLink = socialLink;
-        } else if (socialLink.url) {
-          window.open(socialLink.url, "_blank");
+      siteLinkClicked(siteLink) {
+        if (siteLink.children) {
+          this.breadcrumbLinks.push(siteLink);
+          this.activeSiteLink = siteLink;
+        } else if (siteLink.url) {
+          window.open(siteLink.url, "_blank");
         } else {
           this.showSnackbarMessage('Link is missing');
-          console.warn('SocialLink Config Error - Please contact site owner to configure src/config/socialLinks.js properly')
+          console.warn('SiteLink Config Error - Please contact site owner to configure src/config/siteLinks.js properly')
         }
       },
-      setBreadcrumb(socialLink, pos) {
+      setBreadcrumb(siteLink, pos) {
         if (pos !== (this.breadcrumbLinks.length - 1)) {
-          this.activeSocialLink = socialLink;
+          this.activeSiteLink = siteLink;
           this.breadcrumbLinks = this.breadcrumbLinks.slice(0, pos + 1)
         }
       },
       goBack() {
         if (this.breadcrumbLinks.length > 1) {
           this.breadcrumbLinks = this.breadcrumbLinks.slice(0, this.breadcrumbLinks.length - 1);
-          this.activeSocialLink = this.breadcrumbLinks[this.breadcrumbLinks.length - 1];
+          this.activeSiteLink = this.breadcrumbLinks[this.breadcrumbLinks.length - 1];
         }
       },
       showSnackbarMessage(message) {

@@ -1,81 +1,101 @@
 <template>
-  <v-container v-if="showPage">
-    <div v-if="!showNotFound">
-      <div>
-        <v-row>
-          <v-col>
-            <span
-              v-for="(breadcrumb, pos) in breadcrumbLinks"
-              :key="pos"
-            >
-              <span style="margin: 3px;" v-if="pos > 0">></span>
+  <v-container>
+    <div v-if="showPage">
+      <div v-if="!showNotFound">
+        <div>
+          <v-row>
+            <v-col>
               <span
-                class="breadcrumb"
-                :class="{'active': pos === (breadcrumbLinks.length - 1)}"
-                :disabled="true"
-                @click="setBreadcrumb(breadcrumb, pos)"
+                v-for="(breadcrumb, pos) in breadcrumbLinks"
+                :key="pos"
               >
-                {{breadcrumb.title}}
+                <span style="margin: 3px;" v-if="pos > 0">></span>
+                <span
+                  class="breadcrumb"
+                  :class="{'active': pos === (breadcrumbLinks.length - 1)}"
+                  :disabled="true"
+                  @click="setBreadcrumb(breadcrumb, pos)"
+                >
+                  {{breadcrumb.title}}
+                </span>
               </span>
-            </span>
-          </v-col>
-        </v-row>
-        <v-toolbar
-          flat
-        >
-          <v-btn
-            icon
-            @click="goBack()"
-            v-if="breadcrumbLinks.length > 1"
+            </v-col>
+          </v-row>
+          <v-toolbar
+            flat
           >
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
-          <v-btn
-            v-else
-            icon
-            disabled
-          >
-            <v-icon>mdi-home</v-icon>
-          </v-btn>
-          <v-toolbar-title>{{activeSocialLink.title}}</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-        <v-row>
-          <v-col v-if="activeSocialLink.children">
-            <CardListItem
-              v-for="(socialLink, pos) in activeSocialLink.children"
-              :key="pos"
-              :socialLink="socialLink"
-              @click="socialLinkClicked(socialLink)"
-            />
-          </v-col>
-          <v-col v-else>
-            This SiteLink is Neither a folder of URL. Please check your configuration for this SiteLink
-          </v-col>
-        </v-row>
+            <v-btn
+              icon
+              @click="goBack()"
+              v-if="breadcrumbLinks.length > 1"
+            >
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              icon
+              disabled
+            >
+              <v-icon>mdi-home</v-icon>
+            </v-btn>
+            <v-toolbar-title>{{activeSiteLink.title}}</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-row>
+            <v-col v-if="activeSiteLink.page" :class="{
+              'col-12 col-sm-12 col-lg-8': activeSiteLink.page && activeSiteLink.children,
+              'col-12': activeSiteLink.page && !activeSiteLink.children,
+            }">
+              <div style="height: 100%; width: 100%">
+                <vue-friendly-iframe
+                  ref="previewIframe"
+                  :src="'about:blank'"
+                  @load="onLoadIframe(activeSiteLink.page)"
+                />
+              </div>
+            </v-col>
+            <v-col v-if="activeSiteLink.children" :class="{
+              'col-12 col-sm-12 col-lg-4': activeSiteLink.page && activeSiteLink.children,
+              'col-12': !activeSiteLink.page && activeSiteLink.children,
+            }">
+              <div>
+                <CardListItem
+                  v-for="(siteLink, pos) in activeSiteLink.children"
+                  :key="pos"
+                  :siteLink="siteLink"
+                  @click="siteLinkClicked(siteLink)"
+                />
+              </div>
+            </v-col>
+            <div v-else-if="!activeSiteLink.children && !activeSiteLink.url && !activeSiteLink.page">
+              This SiteLink is Neither a folder of URL. Please check your configuration for this SiteLink
+            </div>
+          </v-row>
+        </div>
       </div>
-      <div
-        v-if="!activeSocialLink.children && activeSocialLink.url"
-      >
-        <center>
-          <div>
-            <h1>Redirecting now</h1>
-          </div>
-          <div>If it doesn't redirect automatically, please click <a :href="this.activeSiteLink.url">here</a></div>
-        </center>
+      <div v-else>
+        <div>
+          <center>
+            <h1>Page or Link NOT FOUND</h1>
+          </center>
+        </div>
+        <div>
+          <center>
+            <v-btn @click="$router.push('/')">Go To Home</v-btn>
+          </center>
+        </div>
       </div>
+
     </div>
-    <div v-else>
-      <div>
-        <center>
-          <h1>Page or Link NOT FOUND</h1>
-        </center>
-      </div>
-      <div>
-        <center>
-          <v-btn @click="$router.push('/')">Go To Home</v-btn>
-        </center>
-      </div>
+    <div
+      v-if="!activeSiteLink.children && activeSiteLink.url"
+    >
+      <center>
+        <div>
+          <h1>Redirecting now</h1>
+        </div>
+        <div>If it doesn't redirect automatically, please click <a :href="activeSiteLink.url">here</a></div>
+      </center>
     </div>
     <v-snackbar
       v-model="snackbar"
@@ -98,7 +118,10 @@
 
 <script>
   import CardListItem from "./CardListItem";
-  import socialLinks from "../configs/socialLinks";
+  import homeConfig from "../configs/homeConfig";
+  import VueFriendlyIframe from 'vue-friendly-iframe';
+  import Vue from 'vue';
+  Vue.use(VueFriendlyIframe);
 
   export default {
     name: 'SiteLinkViewer',
@@ -113,7 +136,7 @@
     }, 
     data: () => ({
       breadcrumbLinks: [],
-      activeSocialLink: {
+      activeSiteLink: {
         title: 'Home',
         children: []
       },
@@ -122,11 +145,6 @@
       showPage: false,
       showNotFound: false,
     }),
-    computed: {
-      socialLinks() {
-        return socialLinks
-      }
-    },
     mounted() {
       this.initPath();
     },  
@@ -139,20 +157,16 @@
     },
     methods: {
       initPath() {
-        this.breadcrumbLinks = [{
-          title: 'Home',
-          children: this.socialLinks,
-        }];
-        this.activeSocialLink = this.breadcrumbLinks[0];
-
+        this.breadcrumbLinks = [homeConfig];
+        this.activeSiteLink = this.breadcrumbLinks[0];
 
         this.routeIds.forEach((id, pos) => {
           if (!(pos === 0 && id === '')) {
-            const socialLink = this.activeSocialLink.children.find((link) => link.id === id)
-            console.log({socialLink})
-            if (socialLink) {
-              this.breadcrumbLinks.push(socialLink);
-              this.activeSocialLink = socialLink;
+            const siteLink = (this.activeSiteLink.children || []).find((link) => link.id === id)
+
+            if (siteLink) {
+              this.breadcrumbLinks.push(siteLink);
+              this.activeSiteLink = siteLink;
             } else {
               this.showNotFound = true;
             }
@@ -160,26 +174,26 @@
         })
         this.showPage = true;
 
-        if (!this.activeSocialLink.children) {
-          // handle socialLink
-          this.socialLinkClicked(this.activeSocialLink, { redirectOnNewTab: false });
+        if (!(this.activeSiteLink.children || this.activeSiteLink.page)) {
+          // handle siteLink
+          this.siteLinkClicked(this.activeSiteLink, { redirectOnNewTab: false });
         }
       },
-      socialLinkClicked(socialLink, options = { redirectOnNewTab: true }) {
-        if (socialLink.children) {
+      siteLinkClicked(siteLink, options = { redirectOnNewTab: true }) {
+        if (siteLink.children || siteLink.page) {
           let link = (this.breadcrumbLinks.map((breadcrumb) => breadcrumb.id).join('/') || '/')
-          link = link + (!link.endsWith('/') ? '/' : '') + socialLink.id;
+          link = link + (!link.endsWith('/') ? '/' : '') + siteLink.id;
           this.$router.push(link);
-        } else if (socialLink.url) {
+        } else if (siteLink.url) {
           options.redirectOnNewTab === true ?
-            window.open(socialLink.url, "_blank") :
-            window.location.href = socialLink.url;
+            window.open(siteLink.url, "_blank") :
+            window.location.href = siteLink.url;
         } else {
           this.showSnackbarMessage('Link is missing');
-          console.warn('SocialLink Config Error - Please contact site owner to configure src/config/socialLinks.js properly')
+          console.warn('SiteLink Config Error - Please contact site owner to configure src/config/siteLinks.js properly')
         }
       },
-      setBreadcrumb(socialLink, pos) {
+      setBreadcrumb(siteLink, pos) {
         if (pos !== (this.breadcrumbLinks.length - 1)) {
           this.breadcrumbLinks = this.breadcrumbLinks.slice(0, pos + 1);
           const link = this.breadcrumbLinks.map((breadcrumb) => breadcrumb.id).join('/') || '/';
@@ -196,7 +210,31 @@
       showSnackbarMessage(message) {
         this.snackbar = true;
         this.snackbarText = message;
-      }
+      },
+      onLoadIframe(page) {
+        const previewIframe = this.$refs.previewIframe;
+        if (!previewIframe) return;
+        const iframe = previewIframe.iframeEl;
+        iframe.onload = () => {
+          const height = iframe.contentDocument.querySelector('body').clientHeight + 20;
+          iframe.style.height = `${height}px`;
+        };
+        // Set attributes for iFrame
+        iframe.width = '100%';
+        iframe.height = '100%';
+        // This for the src makes it 'friendly'
+        iframe.src = 'about:blank';
+
+        /*eslint no-useless-escape: "off"*/
+        const css = `<style>${page.css || ''}<\/style>`;
+        const js = `<script>${page.js || ''}<\/script>`;
+        const content = '<!DOCTYPE html>' + '<html><head><title>Rendered HTML from Message</title>' + css + '</head><body>' + page.html + js + '</body></html>';
+
+        // Use the JavaScript methods to write to the iFrame, then close it
+        iframe.contentWindow.document.open('text/html', 'replace');
+        iframe.contentWindow.document.write(content);
+        iframe.contentWindow.document.close();
+      },
     }
   }
 </script>
@@ -220,6 +258,17 @@
       background: none;
       cursor:initial;
     };
+  }
+}
+
+.vue-friendly-iframe {
+  // min-height: 50vh;
+  iframe {
+    visibility: initial !important;
+    position: initial !important;
+    top: 0 !important;
+    border: none;
+    min-height: 80vh !important;
   }
 }
 </style>

@@ -1,4 +1,4 @@
 export default {
-  background: '#e3f2fd',
+  background: '#f5f5f5',
   siteName: 'Manz Studios',
 }
