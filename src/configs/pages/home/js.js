@@ -38,4 +38,4 @@ export default `(function(document, window, $){
 			// Functions
 		});
 	});
-})(document, window, jQuery);`
+})(document, window, jQuery);`;
