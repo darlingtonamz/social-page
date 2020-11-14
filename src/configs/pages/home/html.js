@@ -24,22 +24,22 @@ export default `
     </section>
     <section class="page face top" id="about">
       <div class="act-table text-center">
-        <div class="act-table-cell ver-middle">about Page</div>
+        <div class="act-table-cell ver-middle">About Page</div>
       </div>
     </section>
     <section class="page face right" id="contact">
       <div class="act-table text-center">
-        <div class="act-table-cell ver-middle">contact Page</div>
+        <div class="act-table-cell ver-middle">Contact Page</div>
       </div>
     </section>
     <section class="page face bottom" id="blog">
       <div class="act-table text-center">
-        <div class="act-table-cell ver-middle">blog Page</div>
+        <div class="act-table-cell ver-middle">Blog Page</div>
       </div>
     </section>
     <section class="page face left" id="article">
       <div class="act-table text-center">
-        <div class="act-table-cell ver-middle">article Page</div>
+        <div class="act-table-cell ver-middle">Article Page</div>
       </div>
     </section>
   </div>

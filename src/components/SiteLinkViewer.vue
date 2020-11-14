@@ -43,7 +43,7 @@
           </v-toolbar>
           <v-row>
             <v-col v-if="activeSiteLink.page" :class="{
-              'col-12 col-sm-12 col-lg-8': activeSiteLink.page && activeSiteLink.children,
+              'col-12 col-sm-12 col-md-8 col-lg-9 col-xl-10': activeSiteLink.page && activeSiteLink.children,
               'col-12': activeSiteLink.page && !activeSiteLink.children,
             }">
               <div style="height: 100%; width: 100%">
@@ -55,7 +55,7 @@
               </div>
             </v-col>
             <v-col v-if="activeSiteLink.children" :class="{
-              'col-12 col-sm-12 col-lg-4': activeSiteLink.page && activeSiteLink.children,
+              'col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2': activeSiteLink.page && activeSiteLink.children,
               'col-12': !activeSiteLink.page && activeSiteLink.children,
             }">
               <div>
@@ -226,8 +226,8 @@
         iframe.src = 'about:blank';
 
         /*eslint no-useless-escape: "off"*/
-        const css = `<style>${page.css || ''}<\/style>`;
-        const js = `<script>${page.js || ''}<\/script>`;
+        const css = `<style>${page.css}<\/style>`;
+        const js = `<script>${page.js}<\/script>`;
         const content = '<!DOCTYPE html>' + '<html><head><title>Rendered HTML from Message</title>' + css + '</head><body>' + page.html + js + '</body></html>';
 
         // Use the JavaScript methods to write to the iFrame, then close it
